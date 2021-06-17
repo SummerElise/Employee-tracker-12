@@ -1,5 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql');
+const cTable = require('console.table');
+
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -20,24 +22,18 @@ const start = () => {
         type: 'rawlist',
         message: 'What would you like to do?',
         choices: [
-            'Add Employee',
-            'Add Role',
-            'Add Department',
-            'Update Employee Role',
-            'View Employee By Department',
-            'View Employee By Role',
-            'View All Employees',
-            'View All Roles',
-            'EXIT',
+            'Add',
+            'Update',
+            'View',
+            'Exit',
         ],
     })
     .then((answer) => {
-        if (answer.action === 'Add Employee', 'Add Role', 'Add Department')  {
+        if (answer.action === 'Add')  {
             addAction();
-        } else if (answer.action === 'Update Employee Role') {
+        } else if (answer.action === 'Update') {
             updateAction();
-        } else if (answer.action === 'View Employee By Department', 'View Employee By Role',
-        'View All Employees', 'View All Roles') {
+        } else if (answer.action === 'View') {
             viewAction();
         } else {
             connection.end();
@@ -171,3 +167,62 @@ const departmentAction = () => {
         );
     });
 };
+
+const updateAction = () => {
+    connection.query(
+        'SELECT * FROM employee', (err, res) => {
+            if (err) throw err;
+            inquirer
+            .prompt([
+                {
+                    name: 'update',
+                    type: 'input',
+                    message: 'What employee would you like to update roles?',
+                },
+            ])
+            .then((answer) => {
+                connection.query(
+                    'UPDATE employee role SET ? WHERE ?',
+                    [
+                        {
+                            role_id: answer.role,
+                        },
+                        {
+                            first_name: answer.employee,
+                        },
+                    ],
+                    (error) => {
+                    if (error) throw err;
+                    console.log('You have updated the Employees Role successfully!');
+                    start();
+                    });
+                });
+            });
+        }
+
+        const viewAction = () => {
+            inquirer
+            .prompt({
+                name: 'action',
+                type: 'rawlist',
+                message: 'What would you like to view?',
+                choices: [
+                    'All Employees',
+                    'All Employees by Department',
+                    ],          
+                })
+            .then((answer) => {
+             if (answer.action === 'All Employees') {
+                 connection.query(
+                     'SELECT * FROM employee', (err, res) => {
+                         if (err) {
+                         console.log('Invalid request');
+                     } else {
+                         console.table(res);
+                         start();
+                     }
+                })
+             };
+        });
+    }
+            
