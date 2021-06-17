@@ -1,7 +1,19 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql');
 const cTable = require('console.table');
-const { resourceLimits } = require('worker_threads');
+
+
+console.table([
+    {
+        id: '',
+        first_name: '',
+        last_name: '',
+        title: '',
+        department: '',
+        salary: '',
+        manager: '',
+    }
+]);
 
 
 const connection = mysql.createConnection({
@@ -226,11 +238,22 @@ const updateAction = () => {
                      'SELECT * FROM employee', (err, res) => {
                          if (err) throw err;
                          //console.log('Invalid request');
+                         console.table(res);     
+                         start();                    
+                     })
+                
+                    } else if (answer.action === 'All Employees by Department') {
+                 connection.query(
+                     'SELECT * FROM department', (err, res) => {
+                         if (err) throw err;
+                         //console.log('Invalid Request');
                          console.table(res);
-                         
-                     }
-                )
-             };
-        });
-    }
+                         start();
+                     })
+                };                 
+            });
+        };
+    
+        
+        
             
