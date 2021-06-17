@@ -44,3 +44,29 @@ const runSearch = () => {
         }
     });
 };
+
+//function to handle 'adding'
+const addAction = () => {
+    inquirer
+    .prompt([
+    {
+        name: 'category',
+        type: 'list',
+        message: 'What would you like to add?',
+        choices: [
+            'Employee',
+            'Role',
+            'Department',
+        ],
+    }
+    ])
+    .then((answer) => {
+        if (answer.category === 'Employee') {
+        employeeAction();
+        } else if (answer.category === 'Role') {
+            roleAction();
+        } else {
+            departmentAction();
+        }
+    });
+};
