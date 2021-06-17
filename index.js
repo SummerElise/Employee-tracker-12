@@ -175,26 +175,30 @@ const updateAction = () => {
             inquirer
             .prompt([
                 {
-                    name: 'update',
-                    type: 'input',
-                    message: 'What employee would you like to update roles?',
-                },
-            ])
+                    name: 'choice',
+                    type: 'rawlist',
+                    choices() {
+                        const choiceArray = []
+                        res.forEach(({ first_name, last_name, role_id, manager_id }) => {
+                            choiceArray.push(role_id +''+ first_name +''+ last_name +''+ manager_id)
+                        })
+                        return choiceArray
+                        },
+                        message: 'What employee would you like to update?'
+                    }]
+            )
             .then((answer) => {
                 connection.query(
-                    'UPDATE employee role SET ? WHERE ?',
-                    [
-                        {
-                            role_id: answer.role,
-                        },
-                        {
-                            first_name: answer.employee,
-                        },
-                    ],
-                    (error) => {
-                    if (error) throw err;
-                    console.log('You have updated the Employees Role successfully!');
-                    start();
+                    'UPDATE employee',
+                    {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: answer.deptID,
+                    },
+                    (err) => {
+                        if (err) throw err;
+                        console.log('Employees Role has been successfully updated!');
+                        start();
                     });
                 });
             });
