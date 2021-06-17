@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql');
 const cTable = require('console.table');
+const { resourceLimits } = require('worker_threads');
 
 
 const connection = mysql.createConnection({
@@ -180,7 +181,7 @@ const updateAction = () => {
                     choices() {
                         const choiceArray = []
                         res.forEach(({ first_name, last_name, role_id, manager_id }) => {
-                            choiceArray.push(role_id +''+ first_name +''+ last_name +''+ manager_id)
+                            choiceArray.push(role_id + '' + first_name + '' + last_name + '' + manager_id)
                         })
                         return choiceArray
                         },
@@ -188,6 +189,8 @@ const updateAction = () => {
                     }]
             )
             .then((answer) => {
+                res.forEach((employee) => {
+                    if (employee === answer) {
                 connection.query(
                     'UPDATE employee',
                     {
@@ -200,6 +203,8 @@ const updateAction = () => {
                         console.log('Employees Role has been successfully updated!');
                         start();
                     });
+                }
+            });
                 });
             });
         }
@@ -219,13 +224,12 @@ const updateAction = () => {
              if (answer.action === 'All Employees') {
                  connection.query(
                      'SELECT * FROM employee', (err, res) => {
-                         if (err) {
-                         console.log('Invalid request');
-                     } else {
+                         if (err) throw err;
+                         //console.log('Invalid request');
                          console.table(res);
-                         start();
+                         
                      }
-                })
+                )
              };
         });
     }
