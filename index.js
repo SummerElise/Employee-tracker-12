@@ -86,12 +86,12 @@ const employeeAction = () => {
         {
             name: 'role_id',
             type: 'input',
-            message: 'What is their role id?',
+            message: 'What is their role ID?',
         },
         {
             name: 'manager_id',
             type: 'input',
-            message: 'What is their manager id?',
+            message: 'What is their manager ID?',
         },
     ])
     .then((answer) => {
@@ -144,6 +144,30 @@ const roleAction = () => {
                 console.log('Role has been successfully added!');
                 start();
             }
-        )
-    })
-}
+        );
+    });
+};
+
+const departmentAction = () => {
+    inquirer
+    .prompt([
+        {
+            name: 'deptName',
+            type: 'input',
+            message: 'What is the name of the Department you wish to add?',
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            'INSERT INTO role SET ?',
+            {
+                name: answer.deptName,
+            },
+            (err) => {
+                if (err) throw err;
+                console.log('Department has been successfully added!');
+                start();
+            }
+        );
+    });
+};
