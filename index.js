@@ -13,3 +13,34 @@ connection.connect((err) => {
     if (err) throw err;
     runSearch();
 });
+
+const runSearch = () => {
+    inquirer.prompt({
+        name: 'action',
+        type: 'rawlist',
+        message: 'What would you like to do?',
+        choices: [
+            'Add Employee',
+            'Add Role',
+            'Add Department',
+            'Update Employee Role',
+            'View Employee By Department',
+            'View Employee By Role',
+            'View All Employees',
+            'View All Roles',
+            'EXIT',
+        ],
+    })
+    .then((answer) => {
+        if (answer.action === 'Add Employee', 'Add Role', 'Add Department')  {
+            addAction();
+        } else if (answer.action === 'Update Employee Role') {
+            updateAction();
+        } else if (answer.action === 'View Employee By Department', 'View Employee By Role',
+        'View All Employees', 'View All Roles') {
+            viewAction();
+        } else {
+            connection.end();
+        }
+    });
+};
