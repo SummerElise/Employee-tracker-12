@@ -11,10 +11,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) throw err;
-    runSearch();
+    start();
 });
 
-const runSearch = () => {
+const start = () => {
     inquirer.prompt({
         name: 'action',
         type: 'rawlist',
@@ -70,3 +70,80 @@ const addAction = () => {
         }
     });
 };
+
+const employeeAction = () => {
+    inquirer.prompt([
+        {
+            name: 'first_name',
+            type: 'input',
+            message: 'What is the first name?',
+        },
+        {
+            name: 'last_name',
+            type: 'input',
+            message: 'What is the last name?',
+        },
+        {
+            name: 'role_id',
+            type: 'input',
+            message: 'What is their role id?',
+        },
+        {
+            name: 'manager_id',
+            type: 'input',
+            message: 'What is their manager id?',
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            'INSERT INTO employee SET ?',
+            {
+                first_name: answer.item_name,
+                last_name: answer.last_name,
+                role_id: answer.role_id,
+                manager_id: answer.manger_id,
+            },
+            (err) => {
+                if (err) throw err;
+                console.log('Employee has been successfully added!');
+                start();
+            }
+        );
+    });
+};
+
+const roleAction = () => {
+    inquirer
+    .prompt([
+        {
+            name: 'title',
+            type: 'input',
+            message: 'What is the title of the Role you wish to add?',
+        },
+        {
+            name: 'salary',
+            type: 'input',
+            message: 'What is the salary for this Role?',
+        },
+        {
+            name: 'deptID',
+            type: 'input',
+            message: 'What is the Department ID?',
+        },
+    ])
+    .then((answer) => {
+        connection.query(
+            'INSERT INTO role SET ?',
+            {
+                title: answer.title,
+                salary: answer.salary,
+                department_id: answer.deptID,
+            },
+            (err) => {
+                if (err) throw err;
+                console.log('Role has been successfully added!');
+                start();
+            }
+        )
+    })
+}
