@@ -198,28 +198,45 @@ const updateAction = () => {
                         return choiceArray
                         },
                         message: 'What employee would you like to update?'
-                    }]
-            )
+                    },
+                    {
+                            name: 'title',
+                            type: 'input',
+                            message: 'What is the title of the Role you wish to update?',
+                    },
+                    {
+                            name: 'salary',
+                            type: 'input',
+                            message: 'What is the salary for this Role?',
+                    },
+                    {
+                            name: 'deptID',
+                            type: 'input',
+                            message: 'What is the Department ID?',
+                    },
+                    ])
+                
             .then((answer) => {
-                res.forEach((employee) => {
-                    if (employee === answer) {
+              
                 connection.query(
                     'UPDATE employee',
                     {
-                        title: answer.title,
-                        salary: answer.salary,
-                        department_id: answer.deptID,
+                    
+                            title: answer.title,
+                            salary: answer.salary,
+                            department_id: answer.deptID,
+                    
                     },
+
                     (err) => {
                         if (err) throw err;
                         console.log('Employees Role has been successfully updated!');
                         start();
                     });
-                }
-            });
                 });
             });
         }
+
 
         const viewAction = () => {
             inquirer
