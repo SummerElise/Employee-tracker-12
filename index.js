@@ -3,18 +3,7 @@ const mysql = require('mysql');
 const cTable = require('console.table');
 
 
-console.table([
-    {
-        id: '',
-        first_name: '',
-        last_name: '',
-        title: '',
-        department: '',
-        salary: '',
-        manager: '',
-    }
-]);
-
+console.table()
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -38,6 +27,7 @@ const start = () => {
             'Add',
             'Update',
             'View',
+            'Remove',
             'Exit',
         ],
     })
@@ -48,6 +38,8 @@ const start = () => {
             updateAction();
         } else if (answer.action === 'View') {
             viewAction();
+        } else if (answer.action === 'Remove') {
+            RemoveAction();
         } else {
             connection.end();
         }
@@ -168,7 +160,7 @@ const departmentAction = () => {
     ])
     .then((answer) => {
         connection.query(
-            'INSERT INTO role SET ?',
+            'INSERT INTO department SET ?',
             {
                 name: answer.deptName,
             },
@@ -219,7 +211,7 @@ const updateAction = () => {
             .then((answer) => {
               
                 connection.query(
-                    'UPDATE employee',
+                    'UPDATE employee SET role',
                     {
                     
                             title: answer.title,
@@ -246,7 +238,8 @@ const updateAction = () => {
                 message: 'What would you like to view?',
                 choices: [
                     'All Employees',
-                    'All Employees by Department',
+                    'All Departments',
+                    'All Roles'
                     ],          
                 })
             .then((answer) => {
@@ -259,7 +252,7 @@ const updateAction = () => {
                          start();                    
                      })
                 
-                    } else if (answer.action === 'All Employees by Department') {
+                    } else if (answer.action === 'All Departments') {
                  connection.query(
                      'SELECT * FROM department', (err, res) => {
                          if (err) throw err;
@@ -267,10 +260,39 @@ const updateAction = () => {
                          console.table(res);
                          start();
                      })
-                };                 
+                } else if (answer.action === 'All Roles') {
+                    connection.query(
+                        'SELECT * FROM role', (err, res) => {
+                            if (err) throw err;
+                            console.table(res);
+                            start();
+                        })                        
+                }                
+
             });
         };
-    
-        
+
+        const removeAction = () => {
+            inquirer
+            .prompt({
+                name: 'action',
+                type: 'rawlist',
+                message: 'What would you like to remove?',
+                choices: [
+                    'An Employee',
+                    'A Department',
+                    'A Role',
+                    'Exit'
+                    ],          
+            })
+            .then((answer) => {
+                if (answer.action === 'A Employee') {
+                    connection.query(
+
+                    )
+                }
+            }
+            )
+        }
         
             
