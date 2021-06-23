@@ -194,28 +194,18 @@ const updateAction = () => {
                     {
                             name: 'title',
                             type: 'input',
-                            message: 'What is the title of the Role you wish to update?',
-                    },
-                    {
-                            name: 'role',
-                            type: 'input',
-                            message: 'What is the updated Role ID?',
-                    },
-                    {
-                            name: 'deptID',
-                            type: 'input',
-                            message: 'What is the Department ID?',
+                            message: 'What Role do you wish to update?',
                     },
                     ])
                 
             .then((answer) => {
               
                 connection.query(
-                    'UPDATE employee SET ? WHERE ?',
+                    'SELECT * FROM role',
                     {
                     
                             title: answer.title,
-                            role_id: answer.role,
+                            salary: answer.salary,
                             department_id: answer.deptID,
                     
                     },
