@@ -45,7 +45,7 @@ So that I can organize and plan my business
 ## Walkthrough Video
 Click the link to view a walkthrough video of the demonstrated application.
 
-
+https://drive.google.com/file/d/1loui2HwDIa-wCp1VwMLNFTCpIijpaYYz/view
 
 ### Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
